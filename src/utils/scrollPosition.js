@@ -1,5 +1,6 @@
 export function getScrollPosition(el) {
-  if (el === document.body || el === document.documentElement) {
+  const element = el;
+  if (element === document.body || element === document.documentElement || element === window) {
     return {
       top: document.body.scrollTop || document.documentElement.scrollTop,
       left: document.body.scrollLeft || document.documentElement.scrollLeft,
@@ -7,17 +8,18 @@ export function getScrollPosition(el) {
   }
 
   return {
-    top: el.scrollTop,
-    left: el.scrollLeft,
+    top: element.scrollTop,
+    left: element.scrollLeft,
   };
 }
 
 export function setScrollPosition(el, position) {
-  if (el === window) {
+  const element = el;
+  if (element === window) {
     document.documentElement.scrollLeft = position.left;
     document.documentElement.scrollTop = position.top;
   } else {
-    el.scrollTop = position.top;
-    el.scrollLeft = position.left;
+    element.scrollTop = position.top;
+    element.scrollLeft = position.left;
   }
 }

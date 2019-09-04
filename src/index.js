@@ -21,7 +21,7 @@ class ScrollTo {
   }
 
   init() {
-    if (!(this.$el instanceof window.Element)) {
+    if (!(this.$el instanceof window.Element) && (this.$el !== window)) {
       throw new Error(`element passed to scrollTo() must be either the window or a DOM element, you passed ${this.$el}!`);
     }
 
@@ -49,17 +49,17 @@ class ScrollTo {
   }
 
   scroll(from, to, startTime, duration, easeFunc) {
-    console.log(from, to)
     const step = () => {
+      const stepPosition = from;
       const currentTime = Date.now();
       const time = Math.min(1, (currentTime - startTime) / duration);
       const easeValue = easeFunc(time);
-      if (from.top !== to.top) {
-        from.top += easeValue * (to.top - from.top);
+      if (Object.prototype.hasOwnProperty.call(from, 'top') && from.top !== to.top) {
+        stepPosition.top += easeValue * (to.top - from.top);
       }
 
       if (from.left !== to.left) {
-        from.left += easeValue * (to.left - from.left);
+        stepPosition.left += easeValue * (to.left - from.left);
       }
 
       if (from.top === to.top && from.left === to.left) {
@@ -67,9 +67,9 @@ class ScrollTo {
         window.cancelAnimationFrame(step);
         return;
       }
-console.log(from)
-      setScrollPosition(this.$el, from);
-      this.scroll(from, to, startTime, duration, easeFunc);
+
+      setScrollPosition(this.$el, stepPosition);
+      this.scroll(stepPosition, to, startTime, duration, easeFunc);
     };
 
     window.requestAnimationFrame(step);
