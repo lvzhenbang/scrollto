@@ -29,8 +29,8 @@ class ScrollTo {
     this.scroll(
       currentScrollPosition,
       {
-        top: this.options.top ? this.options.top : currentScrollPosition.top,
-        left: this.options.left ? this.options.left : currentScrollPosition.left,
+        top: Number.isNaN(this.options.top) ? currentScrollPosition.top : this.options.top,
+        left: Number.isNaN(this.options.left) ? currentScrollPosition.left : this.options.left,
       },
       Date.now(),
       this.duration,
